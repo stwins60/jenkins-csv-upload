@@ -17,17 +17,9 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
       "Sid": "PublicReadGetObject",
       "Effect": "Allow",
       "Principal": "*",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:PutObjectAcl",
-        "s3:DeleteObject",
-        "s3:ListBucket",
-        "s3:DeleteBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::vivians3bucket1007/*"
-      ]
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::vivians3bucket1007/*"
+      
     }
   ]
 }
