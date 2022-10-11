@@ -5,6 +5,7 @@ resource "aws_s3_bucket" "s3_bucket" {
     Name        = "vivians3bucket1007"
     Environment = "dev"
   }
+  force_destroy="true"
 }
 
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
