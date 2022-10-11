@@ -4,7 +4,7 @@ pipeline {
        terraform 'terraform'
     }
     environment {
-        S3_BUCKET = "s3://jenkins_csv_upload_10_07"
+        S3_BUCKET = "s3://s3bucket1007"
     }
     stages {
         stage('Git checkout') {

@@ -44,11 +44,11 @@ jobs:
         run: terraform apply -auto-approve -input=false
 
       - name: Remove files if file exists in S3 Bucket
-        run: aws s3 rm s3://jenkins_csv_upload_10_07/files.csv --recursive
+        run: aws s3 rm s3://s3bucket1007/files.csv --recursive
         
 
       - name: Upload files to S3 Bucket
-        run: aws s3 cp ./files.csv s3://jenkins_csv_upload_10_07 --recursive
+        run: aws s3 cp ./files.csv s3://s3bucket1007 --recursive
 
       - name: Terraform Destroy
         env:

@@ -26,7 +26,7 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
         "s3.DeleteBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::jenkins_csv_upload_10_07/*"
+        "arn:aws:s3:::s3bucket1007/*"
       ]
     }
   ]
