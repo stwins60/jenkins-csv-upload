@@ -1,10 +1,11 @@
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "JENKINS-CSV-UPLOAD-10-08"
+  bucket = "vivians3bucket1007"
   acl    = "private"
   tags = {
-    Name        = "JENKINS-CSV-UPLOAD-10-08"
+    Name        = "vivians3bucket1007"
     Environment = "dev"
   }
+  force_destroy="true"
 }
 
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
@@ -17,17 +18,9 @@ resource "aws_s3_bucket_policy" "s3_bucket_policy" {
       "Sid": "PublicReadGetObject",
       "Effect": "Allow",
       "Principal": "*",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:PutObjectAcl",
-        "s3.DeleteObject",
-        "s3:ListBucket",
-        "s3.DeleteBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::JENKINS-CSV-UPLOAD-10-08/*"
-      ]
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::vivians3bucket1007/*"
+      
     }
   ]
 }
