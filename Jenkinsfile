@@ -4,12 +4,12 @@ pipeline {
        terraform 'terraform'
     }
     environment {
-        S3_BUCKET = "s3://vivians3bucket1007"
+        S3_BUCKET = "s3://JENKINS-CSV-UPLOAD-10-08"
     }
     stages {
-        stage('Git checkout') {
+        stage('Git Clone') {
            steps{
-                git branch: 'main', credentialsId: 'Github', url: 'https://github.com/stwins60/jenkins-csv-upload'
+                git "https://github.com/stwins60/jenkins-csv-upload.git"
             }
         }
 
@@ -18,27 +18,49 @@ pipeline {
                 script {
                     def s3BucketExists = sh(returnStdout: true, script: "aws s3 ls ${S3_BUCKET}").trim()
                     if (s3BucketExists == "") {
-                        sh "aws s3 mb ${S3_BUCKET}"
+                        bat "aws s3 mb ${S3_BUCKET}"
                     }
                     else {
-                        sh "aws s3 rm ${S3_BUCKET} --recursive"
+                        bat "aws s3 rm ${S3_BUCKET} --recursive"
                     }
                 }
             }
         }
         stage('terraform format check') {
             steps{
-                sh 'terraform fmt'
+                bat 'terraform fmt'
             }
         }
         stage('terraform Init') {
             steps{
-                sh 'terraform init'
+                bat 'terraform init'
             }
         }
         stage('terraform apply') {
             steps{
-                sh 'terraform apply --auto-approve'
+                script {
+                    if (params.env == 'test'){
+                        echo 'deploying on test'
+                        bat 'terraform apply s3/test --auto-approve'
+                    }
+                    if (params.env == 'dev'){
+                        echo 'deploying on dev'
+                        bat 'terraform apply s3/dev --auto-approve'
+                    }
+                    if (params.env == 'prod'){
+                        echo 'deploying on prod'
+                        bat 'terraform apply s3/prod --auto-approve'
+                    }
+                }
+                // bat 'terraform apply s3/test --auto-approve'
+            }
+        }
+        stage("Upload CSV file to S3 with timestamp") {
+            steps {
+                script {
+                    def timestamp = sh(returnStdout: true, script: "date +%Y-%m-%d-%H-%M-%S").trim()
+                    bat "aws s3 cp ${files.csv} ${S3_BUCKET}/files-${timestamp}.csv"
+                }
             }
         }
     }
